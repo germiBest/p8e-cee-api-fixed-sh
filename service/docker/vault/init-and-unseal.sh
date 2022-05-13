@@ -8,9 +8,12 @@ export SECRET_PATH=$2
 printf "\nInitializing Vault..\n"
 vault operator init | tee service/docker/vault/init.output >/dev/null
 cat service/docker/vault/init.output | grep '^Unseal' | rev | cut -d ' ' -f 1 | rev > service/docker/vault/keys.output
-while IFS=\= read -r key; do
-  UNSEAL_KEYS+=($key)
-done < service/docker/vault/keys.output
+
+UNSEAL_KEYS[1]=$(awk 'NR==1' service/docker/vault/keys.output)
+UNSEAL_KEYS[2]=$(awk 'NR==2' service/docker/vault/keys.output)
+UNSEAL_KEYS[3]=$(awk 'NR==3' service/docker/vault/keys.output)
+UNSEAL_KEYS[4]=$(awk 'NR==4' service/docker/vault/keys.output)
+UNSEAL_KEYS[5]=$(awk 'NR==5' service/docker/vault/keys.output)
 
 # export root token
 export ROOT_TOKEN=$(cat service/docker/vault/init.output | grep '^Initial' | rev | cut -d ' ' -f 1 | rev)
