@@ -3,7 +3,9 @@
 printf "\nCopying Vault config to Docker volume..\n\n"
 
 rm -rf service/docker/volumes
-mkdir -p service/docker/volumes/{config,file,logs}
+mkdir -p service/docker/volumes/config
+mkdir -p service/docker/volumes/file
+mkdir -p service/docker/volumes/logs
 
 cat > service/docker/volumes/config/vault.json << EOF
 {
