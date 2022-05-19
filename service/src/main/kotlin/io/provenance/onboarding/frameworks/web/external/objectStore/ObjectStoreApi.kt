@@ -89,11 +89,11 @@ class ObjectStoreApi {
         ),
         RouterOperation(
             path = "${Routes.EXTERNAL_BASE_V1}/eos",
-            method = arrayOf(RequestMethod.POST),
+            method = arrayOf(RequestMethod.GET),
             produces = ["application/json"],
             operation = Operation(
                 tags = ["Object Store"],
-                operationId = "postObjectToStore",
+                operationId = "getObjectFromStore",
                 method = "GET",
                 parameters = [
                     Parameter(
@@ -123,7 +123,7 @@ class ObjectStoreApi {
             operation = Operation(
                 tags = ["Object Store"],
                 operationId = "enableReplication",
-                method = "GET",
+                method = "POST",
                 requestBody = RequestBody(
                     required = true,
                     content = [Content(schema = Schema(implementation = EnableReplicationRequest::class))]
