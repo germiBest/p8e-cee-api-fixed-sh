@@ -1,8 +1,9 @@
 package io.provenance.onboarding.domain.usecase.cee.common.client
 
+import io.provenance.core.KeyType
 import io.provenance.onboarding.domain.usecase.AbstractUseCase
 import io.provenance.onboarding.domain.usecase.cee.common.client.model.CreateClientRequest
-import io.provenance.onboarding.domain.usecase.common.originator.EntityManager
+import io.provenance.onboarding.domain.usecase.common.originator.GetOriginator
 import io.provenance.onboarding.frameworks.config.ProvenanceProperties
 import io.provenance.scope.encryption.model.DirectKeyRef
 import io.provenance.scope.encryption.util.toJavaPublicKey
@@ -19,11 +20,11 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class CreateClient(
+    private val getOriginator: GetOriginator,
     private val provenanceProperties: ProvenanceProperties,
-    private val entityManager: EntityManager,
 ) : AbstractUseCase<CreateClientRequest, Client>() {
     override suspend fun execute(args: CreateClientRequest): Client {
-        val originator = entityManager.getEntity(args.uuid)
+        val originator = getOriginator.execute(args.uuid)
         val affiliate = Affiliate(
             signingKeyRef = DirectKeyRef(KeyPair(originator.signingPublicKey() as PublicKey, originator.signingPrivateKey() as PrivateKey)),
             encryptionKeyRef = DirectKeyRef(KeyPair(originator.encryptionPublicKey() as PublicKey, originator.encryptionPrivateKey() as PrivateKey)),
@@ -47,8 +48,9 @@ class CreateClient(
                 }
             )
         ).also { client ->
-            args.affiliates.forEach { kp ->
-                client.affiliateRepository.addAffiliate(kp.signingKey.toJavaPublicKey(), kp.encryptionKey.toJavaPublicKey())
+            args.affiliates.forEach {
+                val keys = getOriginator.execute(it.uuid).keys
+                client.affiliateRepository.addAffiliate(keys[KeyType.SIGNING_PUBLIC_KEY].toString().toJavaPublicKey(), keys[KeyType.ENCRYPTION_PUBLIC_KEY].toString().toJavaPublicKey())
             }
         }
 

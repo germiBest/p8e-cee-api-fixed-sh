@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Primary
         ServiceProps::class,
         ObjectStoreConfig::class,
         VaultProperties::class,
+        ServiceKeysProperties::class,
         ProvenanceProperties::class
     ]
 )
