@@ -3,7 +3,7 @@ package io.provenance.onboarding.frameworks.objectStore
 import com.google.protobuf.Message
 import io.provenance.objectstore.proto.Objects
 import io.provenance.onboarding.domain.objectStore.ObjectStore
-import io.provenance.api.models.eos.StoreAssetResponse
+import io.provenance.api.models.eos.StoreProtoResponse
 import io.provenance.api.models.eos.toModel
 import io.provenance.onboarding.frameworks.config.ObjectStoreConfig
 import io.provenance.onboarding.frameworks.provenance.extensions.getEncryptedPayload
@@ -14,7 +14,6 @@ import io.provenance.scope.encryption.model.DirectKeyRef
 import io.provenance.scope.encryption.proto.Encryption
 import io.provenance.scope.objectstore.client.OsClient
 import org.springframework.stereotype.Component
-import tech.figure.asset.v1beta1.Asset
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.util.concurrent.TimeUnit
@@ -85,10 +84,10 @@ class ObjectStoreService(
         return res.getDecryptedPayload(DirectKeyRef(publicKey, privateKey)).readAllBytes()
     }
 
-    override fun storeAsset(
+    override fun storeMessage(
         client: OsClient,
-        asset: Asset,
+        message: Message,
         publicKey: PublicKey,
         additionalAudiences: Set<PublicKey>
-    ): StoreAssetResponse = encryptAndStore(client, asset, publicKey, additionalAudiences).toModel()
+    ): StoreProtoResponse = encryptAndStore(client, message, publicKey, additionalAudiences).toModel()
 }

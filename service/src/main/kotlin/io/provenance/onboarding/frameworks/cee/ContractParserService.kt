@@ -11,6 +11,6 @@ class ContractParserService(
     private val parsers: List<InputParser>
 ) : ContractParser {
     override fun parseInput(input: Any, type: Class<*>): Message =
-        parsers.firstOrNull { type.kotlin.isSubclassOf(it.type.kotlin) }?.parse(input, type)
+        parsers.firstOrNull { type.kotlin.isSubclassOf(it.type.kotlin) && it.default }?.parse(input, type)
             ?: throw IllegalStateException("Failed to find parser for contract input.")
 }
