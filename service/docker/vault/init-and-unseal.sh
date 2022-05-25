@@ -12,8 +12,7 @@ cat service/docker/vault/init.output | grep '^Unseal' | rev | cut -d ' ' -f 1 | 
 filename='service/docker/vault/keys.output'
 n=1
 while read line; do
-# reading each line
-UNSEAL_KEYS[$n]=$line
+UNSEAL_KEYS[$n]='$line'
 n=$((n+1))
 done < $filename
 
