@@ -2,8 +2,8 @@
 
 # install gradle and java
 sudo apt-get update
-sudo apt-get install openjdk-11-jdk
-sudo apt-get install unzip zip
+sudo apt-get install openjdk-11-jdk -y
+sudo apt-get install unzip zip -y
 curl -s "https://get.sdkman.io" | bash
 source "/home/ubuntu/.sdkman/bin/sdkman-init.sh"
 sdk install gradle 7.3.3
@@ -21,7 +21,7 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
@@ -37,7 +37,7 @@ docker-compose --version
 # install vault
 curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-sudo apt-get update && sudo apt-get install vault
+sudo apt-get update && sudo apt-get install vault -y
 
 # install coreutils
-sudo apt-get install coreutils
+sudo apt-get install coreutils -y
